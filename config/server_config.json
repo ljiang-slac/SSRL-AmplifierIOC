@@ -1,0 +1,103 @@
+{
+    "s022prodlx1": {
+        "ipaddr": "192.168.22.4",
+        "tcp_host": "192.168.22.41",
+        "PORT_CONFIG": {
+            "1": {
+                "serial": "/dev/ttyr04",
+                "tcp_port": 4001,
+                "server_port": 5064,
+                "repeater_port": 5065,
+                "prefix": "BL22:SRS570_AMP1:"
+            },
+            "2": {
+                "serial": "/dev/ttyr05",
+                "tcp_port": 4002,
+                "server_port": 5066,
+                "repeater_port": 5067,
+                "prefix": "BL22:SRS570_AMP2:"
+            },
+            "3": {
+                "serial": "/dev/ttyr06",
+                "tcp_port": 4003,
+                "server_port": 5068,
+                "repeater_port": 5069,
+                "prefix": "BL22:SRS570_AMP3:"
+            },
+            "4": {
+                "serial": "/dev/ttyr07",
+                "tcp_port": 4004,
+                "server_port": 5070,
+                "repeater_port": 5071,
+                "prefix": "BL22:SRS570_AMP4:"
+            }
+        }
+    },
+    "s022prodlx2": {
+        "ipaddr": "192.168.22.5",
+        "tcp_host": "192.168.22.42",
+        "PORT_CONFIG": {
+            "1": {
+                "serial": "/dev/ttyr00",
+                "tcp_port": 4001,
+                "server_port": 5074,
+                "repeater_port": 5075,
+                "prefix": "BL22:SRS570_AMP1:"
+            },
+            "2": {
+                "serial": "/dev/ttyr01",
+                "tcp_port": 4002,
+                "server_port": 5076,
+                "repeater_port": 5077,
+                "prefix": "BL22:SRS570_AMP2:"
+            },
+            "3": {
+                "serial": "/dev/ttyr02",
+                "tcp_port": 4003,
+                "server_port": 5078,
+                "repeater_port": 5079,
+                "prefix": "BL22:SRS570_AMP3:"
+            },
+            "4": {
+                "serial": "/dev/ttyr03",
+                "tcp_port": 4004,
+                "server_port": 5080,
+                "repeater_port": 5081,
+                "prefix": "BL22:SRS570_AMP4:"
+            }
+        }
+    },
+    "default": {
+        "ipaddr": "0.0.0.0",
+        "PORT_CONFIG": {
+            "1": {
+                "serial": "/dev/ttyUSB0",
+                "tcp_port": 4001,
+                "server_port": 5064,
+                "repeater_port": 5065,
+                "prefix": "BL22:SRS570_AMP1:"
+            },
+            "2": {
+                "serial": "/dev/ttyUSB1",
+                "tcp_port": 4002,
+                "server_port": 5066,
+                "repeater_port": 5067,
+                "prefix": "BL22:SRS570_AMP2:"
+            },
+            "3": {
+                "serial": "/dev/ttyUSB2",
+                "tcp_port": 4003,
+                "server_port": 5068,
+                "repeater_port": 5069,
+                "prefix": "BL22:SRS570_AMP3:"
+            },
+            "4": {
+                "serial": "/dev/ttyUSB3",
+                "tcp_port": 4004,
+                "server_port": 5070,
+                "repeater_port": 5071,
+                "prefix": "BL22:SRS570_AMP4:"
+            }
+        }
+    }
+}

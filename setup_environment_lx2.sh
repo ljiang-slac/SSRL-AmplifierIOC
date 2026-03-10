@@ -1,0 +1,5 @@
+#!/bin/bash
+source venv/bin/activate
+export EPICS_CA_ADDR_LIST='192.168.22.5:5074 192.168.22.5:5076 192.168.22.5:5078 192.168.22.5:5080'
+export EPICS_CA_AUTO_ADDR_LIST=NO
+

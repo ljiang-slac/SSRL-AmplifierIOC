@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  srs570-ioc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: srs570-ioc
+    restart: unless-stopped
+    
+    # Network mode for EPICS CA broadcast support
+    # Use 'host' for full CA support, or configure specific ports
+    network_mode: host
+    
+    environment:
+      # Connection mode: 'serial' or 'tcp'
+      - SRS570_CONNECTION_MODE=tcp
+      # TCP host for MOXA connection
+      - SRS570_TCP_HOST=192.168.1.100
+      # Comma-separated list of amplifier ports to run (1-4)
+      - SRS570_PORTS=1,2
+      # IOC IP address (0.0.0.0 for all interfaces)
+      - SRS570_IOC_IPADDR=0.0.0.0
+    
+    volumes:
+      # Mount logs directory for persistence
+      - ./logs:/app/logs
+      # Mount config directory for custom configurations
+      - ./config:/app/config
+      # For serial mode, mount the serial devices
+      # - /dev/ttyUSB0:/dev/ttyUSB0
+      # - /dev/ttyUSB1:/dev/ttyUSB1
+    
+    # Required for serial device access
+    # privileged: true
+    
+    # Or use device mapping for serial (more secure than privileged)
+    # devices:
+    #   - /dev/ttyUSB0:/dev/ttyUSB0
+    #   - /dev/ttyUSB1:/dev/ttyUSB1
+
+  # Alternative: Run with bridge networking (requires explicit port mapping)
+  # srs570-ioc-bridge:
+  #   build: .
+  #   ports:
+  #     - "5064:5064/tcp"
+  #     - "5064:5064/udp"
+  #     - "5065:5065/tcp"
+  #     - "5065:5065/udp"
+  #     - "5066:5066/tcp"
+  #     - "5066:5066/udp"
+  #     - "5067:5067/tcp"
+  #     - "5067:5067/udp"

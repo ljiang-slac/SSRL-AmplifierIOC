@@ -1,0 +1,5 @@
+#!/bin/bash
+source bin/activate
+export EPICS_CA_ADDR_LIST='192.168.22.4:5064 192.168.22.4:5066 192.168.22.4:5068 192.168.22.4:5070'
+#export EPICS_CA_AUTO_ADDR_LIST=NO
+
