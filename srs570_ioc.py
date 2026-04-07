@@ -125,20 +125,20 @@ class SRS570IOC(PVGroup):
     NAME = pvproperty(value="SRS570 Amplifier", dtype=ChannelType.STRING,
                       doc="Amplifier name/descriptor")
     
-    SENSITIVITY = pvproperty(value=0.0, doc="Sensitivity index (0-27)")
+    SENSITIVITY = pvproperty(value=0.0, dtype=ChannelType.LONG, doc="Sensitivity index (0-27)")
     SENSITIVITY_CAL_MODE = pvproperty(
         dtype=ChannelType.ENUM, enum_strings=['calibrated', 'uncalibrated'], 
         value='calibrated', doc="Sensitivity cal mode: 0=calibrated, 1=uncalibrated"
     )
     SENSITIVITY_VERNIER = pvproperty(
-        value=0, doc="Uncalibrated sensitivity vernier (0-100, percent of full scale)"
+        value=0, dtype=ChannelType.LONG, doc="Uncalibrated sensitivity vernier (0-100, percent of full scale)"
     )
     INPUT_OFFSET_ON = pvproperty(
         dtype=ChannelType.ENUM, enum_strings=['off', 'on'], 
         value='off', doc="Input offset current on/off: 0=off, 1=on"
     )
     INPUT_OFFSET_LEVEL = pvproperty(
-        value=0, doc="Input offset current level index (0-29)"
+        value=0, dtype=ChannelType.LONG, doc="Input offset current level index (0-29)"
     )
     INPUT_OFFSET_SIGN = pvproperty(
         dtype=ChannelType.ENUM, enum_strings=['negative', 'positive'], 
@@ -149,14 +149,14 @@ class SRS570IOC(PVGroup):
         value='calibrated', doc="Input offset cal mode: 0=calibrated, 1=uncalibrated"
     )
     INPUT_OFFSET_VERNIER = pvproperty(
-        value=0, doc="Uncalibrated input offset vernier (-1000 to 1000)"
+        value=0, dtype=ChannelType.LONG, doc="Uncalibrated input offset vernier (-1000 to 1000)"
     )
     BIAS_VOLTAGE_ON = pvproperty(
         dtype=ChannelType.ENUM, enum_strings=['off', 'on'], 
         value='off', doc="Bias voltage on/off: 0=off, 1=on"
     )
     BIAS_VOLTAGE_LEVEL = pvproperty(
-        value=0, doc="Bias voltage level (-5000 to 5000, -5.000 V to +5.000 V)"
+        value=0, dtype=ChannelType.LONG, doc="Bias voltage level (-5000 to 5000, -5.000 V to +5.000 V)"
     )
     FILTER_TYPE = pvproperty(
         dtype=ChannelType.ENUM, 
@@ -164,10 +164,10 @@ class SRS570IOC(PVGroup):
         value='None', doc="Filter type: 0=6dB HP, 1=12dB HP, 2=6dB BP, 3=6dB LP, 4=12dB LP, 5=None"
     )
     FILTER_LP_FREQ = pvproperty(
-        value=0, doc="Lowpass filter 3dB frequency index (0-15)"
+        value=0, dtype=ChannelType.LONG, doc="Lowpass filter 3dB frequency index (0-15)"
     )
     FILTER_HP_FREQ = pvproperty(
-        value=0, doc="Highpass filter 3dB frequency index (0-11)"
+        value=0, dtype=ChannelType.LONG, doc="Highpass filter 3dB frequency index (0-11)"
     )
     RESET_OVERLOAD = pvproperty(
         value=0, doc="Reset filter capacitors: write 1 to trigger, remains 0"
@@ -431,14 +431,14 @@ class SRS570IOC(PVGroup):
                 raise ValueError(f"Sensitivity index {index} out of range (0-27)")
             self.send_command(f"SENS {index}\r\n", f"Setting sensitivity to index {index}")
             self.last_sens_index = index
-            instance._data['value'] = float(index)
+            instance._data['value'] = index
             self.GAIN._data['value'] = self.SENSITIVITY_MAP[index]
             await self.GAIN.publish(self.SENSITIVITY_MAP[index])
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"SENSITIVITY updated to {index} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(index)
+            return index
         except Exception as e:
             logger.error(f"Error setting SENSITIVITY for AMP{self.port_index}: {e}")
             raise
@@ -473,12 +473,12 @@ class SRS570IOC(PVGroup):
             if not 0 <= vernier <= 100:
                 raise ValueError(f"Sensitivity vernier {vernier} must be between 0 and 100")
             self.send_command(f"SUCV {vernier}\r\n", f"Setting sensitivity vernier to {vernier}")
-            instance._data['value'] = float(vernier)
+            instance._data['value'] = vernier
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"SENSITIVITY_VERNIER updated to {vernier} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(vernier)
+            return vernier
         except Exception as e:
             logger.error(f"Error setting SENSITIVITY_VERNIER for AMP{self.port_index}: {e}")
             raise
@@ -518,14 +518,14 @@ class SRS570IOC(PVGroup):
             if level not in self.OFFSET_LEVEL_MAP:
                 raise ValueError(f"Input offset level index {level} must be between 0 and 29")
             self.send_command(f"IOLV {level}\r\n", f"Setting input offset level to {level}")
-            instance._data['value'] = float(level)
+            instance._data['value'] = level
             self.OFFSET_LEVEL_GAIN._data['value'] = self.OFFSET_LEVEL_MAP[level]
             await self.OFFSET_LEVEL_GAIN.publish(self.OFFSET_LEVEL_MAP[level])
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"INPUT_OFFSET_LEVEL updated to {level} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(level)
+            return level
         except Exception as e:
             logger.error(f"Error setting INPUT_OFFSET_LEVEL for AMP{self.port_index}: {e}")
             raise
@@ -579,12 +579,12 @@ class SRS570IOC(PVGroup):
             if not -1000 <= vernier <= 1000:
                 raise ValueError(f"Input offset vernier {vernier} must be between -1000 and 1000")
             self.send_command(f"IOUV {vernier}\r\n", f"Setting input offset vernier to {vernier}")
-            instance._data['value'] = float(vernier)
+            instance._data['value'] = vernier
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"INPUT_OFFSET_VERNIER updated to {vernier} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(vernier)
+            return vernier
         except Exception as e:
             logger.error(f"Error setting INPUT_OFFSET_VERNIER for AMP{self.port_index}: {e}")
             raise
@@ -620,12 +620,12 @@ class SRS570IOC(PVGroup):
             if not -5000 <= level <= 5000:
                 raise ValueError(f"Bias voltage level {level} must be between -5000 and 5000")
             self.send_command(f"BSLV {level}\r\n", f"Setting bias voltage level to {level}")
-            instance._data['value'] = float(level)
+            instance._data['value'] = level
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"BIAS_VOLTAGE_LEVEL updated to {level} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(level)
+            return level
         except Exception as e:
             logger.error(f"Error setting BIAS_VOLTAGE_LEVEL for AMP{self.port_index}: {e}")
             raise
@@ -661,12 +661,12 @@ class SRS570IOC(PVGroup):
             if freq_idx not in self.FILTER_LP_FREQ_MAP:
                 raise ValueError(f"Lowpass filter frequency index {freq_idx} must be between 0 and 15")
             self.send_command(f"LFRQ {freq_idx}\r\n", f"Setting lowpass filter frequency to {freq_idx}")
-            instance._data['value'] = float(freq_idx)
+            instance._data['value'] = freq_idx
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"FILTER_LP_FREQ updated to {freq_idx} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(freq_idx)
+            return freq_idx
         except Exception as e:
             logger.error(f"Error setting FILTER_LP_FREQ for AMP{self.port_index}: {e}")
             raise
@@ -680,12 +680,12 @@ class SRS570IOC(PVGroup):
             if freq_idx not in self.FILTER_HP_FREQ_MAP:
                 raise ValueError(f"Highpass filter frequency index {freq_idx} must be between 0 and 11")
             self.send_command(f"HFRQ {freq_idx}\r\n", f"Setting highpass filter frequency to {freq_idx}")
-            instance._data['value'] = float(freq_idx)
+            instance._data['value'] = freq_idx
             self.save_to_json()
             end_time = time.time()
             logger.debug(f"FILTER_HP_FREQ updated to {freq_idx} for AMP{self.port_index}, "
                         f"took {end_time - start_time:.3f}s")
-            return float(freq_idx)
+            return freq_idx
         except Exception as e:
             logger.error(f"Error setting FILTER_HP_FREQ for AMP{self.port_index}: {e}")
             raise
@@ -801,7 +801,8 @@ class SRS570IOC(PVGroup):
             )
             physical_value = self.SENSITIVITY_MAP[closest_index]
             logger.debug(f"Calculated index {closest_index} for value {target_value}")
-            self.SENSITIVITY._data['value'] = float(closest_index)
+            self.SENSITIVITY._data['value'] = closest_index
+            await self.SENSITIVITY.publish(closest_index)
             self.send_command(f"SENS {closest_index}\r\n", 
                             f"Setting sensitivity to index {closest_index}")
             instance._data['value'] = physical_value
@@ -838,8 +839,8 @@ class SRS570IOC(PVGroup):
                 key=lambda k: abs(self.OFFSET_LEVEL_MAP[k] - target_value)
             )
             physical_value = self.OFFSET_LEVEL_MAP[closest_index]
-            self.INPUT_OFFSET_LEVEL._data['value'] = float(closest_index)
-            await self.INPUT_OFFSET_LEVEL.publish(float(closest_index))
+            self.INPUT_OFFSET_LEVEL._data['value'] = closest_index
+            await self.INPUT_OFFSET_LEVEL.publish(closest_index)
             self.send_command(f"IOLV {closest_index}\r\n", 
                             f"Setting input offset level to {closest_index}")
             instance._data['value'] = physical_value
