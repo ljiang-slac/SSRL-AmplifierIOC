@@ -1,0 +1,3 @@
+[submodule "srs570-ioc-dev"]
+	path = srs570-ioc-dev
+	url = https://github.com/slaclab/ssrl-srs570-ioc.git
